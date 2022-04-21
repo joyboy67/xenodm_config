@@ -1,0 +1,49 @@
+#!/bin/sh
+
+/usr/X11R6/bin/xrandr --output default --dpi 96
+
+# requires pkg_add terminus-font
+/usr/X11R6/bin/xset fp+ /usr/local/share/fonts/terminus
+
+# set background color
+BG_COLOR=#203051
+/usr/X11R6/bin/xsetroot -solid $BG_COLOR
+
+SIZES=$(/usr/X11R6/bin/xrandr | /usr/bin/awk ' /\*/ { print $1}' )
+WIDTH=$(echo $SIZES | /usr/bin/cut -d "x" -f 1)
+HEIGHT=$(echo $SIZES | /usr/bin/cut -d "x" -f 2)
+PUFFY_WIDTH=$(( $HEIGHT - 700))  #700 is xlogin.Login.y coming from the Xresources file
+POSX=$(( ( $WIDTH - $PUFFY_WIDTH ) / 2 ))
+POSY=$(( $HEIGHT * 10 / 100 ))
+
+# show BluePuffy 
+/usr/local/bin/feh -B $BG_COLOR -g ${PUFFY_WIDTH}x${PUFFY_WIDTH}+$POSX+$POSY -. -Z /etc/X11/xenodm/pixmaps/bluepuffy.gif &
+
+# show the Sleep / Restart / Shutdown bar
+# in case of sleep, pop xmessage again after waking up
+(
+while true; do
+  #to position the text at the middle of the screen
+  POS=$(( ( $WIDTH - 12*34 ) / 2  ))  #text is 34 char, 12 is linked to the size of font select in Xresources
+  /usr/X11R6/bin/xmessage -geometry +$POS-150         -buttons "[ Sleep ]":20,"[ Restart ]":21,"[ Shutdown ]":22 ""
+  ACTION=$?
+  echo "Xmessage said: $ACTION"
+  if   [ $ACTION -eq 20 ]; then /usr/sbin/zzz;
+  elif [ $ACTION -eq 21 ]; then
+    /usr/X11R6/bin/xsetroot -cursor_name watch
+    /sbin/shutdown -r now
+  elif [ $ACTION -eq 22 ]; then
+    /usr/X11R6/bin/xsetroot -cursor_name watch
+    /sbin/shutdown -p now
+  else echo "Something bad happened to Xmessage.";
+  fi
+  # stop looping if xclock died (hopefully killed by GiveConsole)
+  if [ -z "$(/usr/bin/pgrep -U root xclock)" ]; then break; fi
+done
+) &
+
+OS_NAME=$(/usr/bin/uname -n)
+OS_INFO=$(/usr/bin/uname -smr)
+KEYBD=$(/usr/X11R6/bin/setxkbmap -print | grep xkb_symbols | cut -d"+" -f2)
+
+/usr/X11R6/bin/xclock -geometry -0+20       -strftime "$OS_NAME ($OS_INFO) Keyboard: $KEYBD | %a. %d %b. %Y  %H:%M:%S " &
