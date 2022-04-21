@@ -1,0 +1,72 @@
+! ----------------------------------------------------------------------
+! Nord colorscheme
+! File: https://github.com/arcticicestudio/nord-xresources/blob/develop/src/nord!
+!
+!
+!
+#define nord0 #203051
+#define nord1 #3B4252
+#define nord4 #D8DEE9
+#define nord11 #BF616A
+
+DisplayManager*terminateServer: true
+
+xroot.background: nord0
+
+
+! ----------------------------------------------------------------------
+! XLogin
+!
+
+xlogin.Login.allowRootLogin: false
+xlogin.Login.echoPasswd:   false
+xlogin.Login.fail:         Authorization failed
+xlogin.Login.greeting:
+xlogin.Login.namePrompt:
+xlogin.Login.passwdPrompt:
+
+
+xlogin.Login.y:                700
+xlogin.Login.width:            480
+xlogin*borderWidth:            0
+xlogin.Login.frameWidth:       0
+xlogin.Login.innerFramesWidth: 0
+xlogin.Login.sepWidth:         0
+
+xlogin.Login.background:  nord0
+xlogin.Login.foreground:  nord4
+xlogin.Login.failColor:   nord11
+xlogin.Login.greetColor:  nord0
+xlogin.Login.inpColor:    nord1
+xlogin.Login.promptColor: nord0
+
+xlogin.Login.face:       DejaVu Sans-16
+xlogin.Login.failFace:   DejaVu Sans-18:bold
+xlogin.Login.greetFace:  DejaVu Sans-0
+xlogin.Login.promptFace: DejaVu Sans-18
+
+! ----------------------------------------------------------------------
+! XClock
+!
+
+xclock*background:       nord0
+xclock*foreground:       nord4
+xclock*borderWidth:      0
+xclock*font:             -*-terminus-bold-*-*-*-16-*-*-*-*-*-iso8859-15
+xclock.Clock.analog:     false
+xclock.Clock.chime:      false
+xclock.Clock.render:     false
+xclock.Clock.twentyfour: true
+xclock.Clock.update:     10
+
+! ----------------------------------------------------------------------
+! XMessage
+!
+
+xmessage*background: nord0
+xmessage*foreground: nord4
+xmessage*borderWidth: 0
+xmessage*font: -*-terminus-bold-*-*-*-24-*-*-*-*-*-iso8859-15
+xmessage*message.scrollHorizontal: Never
+xmessage*message.scrollVertical: Never
+xmessage*timeout: 0
